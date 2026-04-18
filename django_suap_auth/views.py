@@ -219,4 +219,3 @@ class SuapDebugView(View):
         }
 
         return JsonResponse(debug_info, json_dumps_params={"indent": 2})
-

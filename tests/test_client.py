@@ -130,3 +130,31 @@ def test_get_user_info_connection_error():
     client = make_client()
     with pytest.raises(SuapUserInfoError):
         client.get_user_info("token")
+
+
+@responses_lib.activate
+def test_exchange_code_request_exception():
+    """Test RequestException (not HTTPError) during token exchange"""
+    import requests
+    responses_lib.add(
+        responses_lib.POST,
+        "https://suap.ifrn.edu.br/o/token/",
+        body=requests.Timeout("timeout"),
+    )
+    client = make_client()
+    with pytest.raises(SuapTokenError):
+        client.exchange_code_for_token("auth-code")
+
+
+@responses_lib.activate
+def test_get_user_info_request_exception():
+    """Test RequestException (not HTTPError) during user info fetch"""
+    import requests
+    responses_lib.add(
+        responses_lib.GET,
+        "https://suap.ifrn.edu.br/api/rh/eu/",
+        body=requests.ConnectionError("connection error"),
+    )
+    client = make_client()
+    with pytest.raises(SuapUserInfoError):
+        client.get_user_info("token")

@@ -95,11 +95,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SUAP_AUTH = {
-    "CLIENT_ID": os.environ.get("SUAP_CLIENT_ID", ""),
-    "CLIENT_SECRET": os.environ.get("SUAP_CLIENT_SECRET", ""),
-    "REDIRECT_URI": os.environ.get("SUAP_REDIRECT_URI", "http://localhost:8000/auth/suap/callback/"),
-    "SCOPES": ["identificacao", "email"],
-    "DIRECT_REDIRECT": os.environ.get("SUAP_DIRECT_REDIRECT", "True") == "True",
+    "CLIENT_ID": os.environ.get("SUAP_AUTH_CLIENT_ID", ""),
+    "CLIENT_SECRET": os.environ.get("SUAP_AUTH_CLIENT_SECRET", ""),
+    "REDIRECT_URI": os.environ.get("SUAP_AUTH_REDIRECT_URI", "http://localhost:8000/auth/suap/callback/"),
+    "SCOPES": os.environ.get("SUAP_AUTH_SCOPES", "identificacao,email").split(","),
+    "DIRECT_REDIRECT": os.environ.get("SUAP_AUTH_DIRECT_REDIRECT", "True") == "True",
 }
 
 LOGIN_REDIRECT_URL = "/dashboard/"

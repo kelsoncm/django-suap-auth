@@ -16,19 +16,28 @@ def test_get_suap_settings_returns_dict():
 
 
 def test_get_suap_settings_raises_on_missing_client_id(settings):
-    del settings.SUAP_CLIENT_ID
+    settings.SUAP_AUTH = {
+        "CLIENT_SECRET": "test-secret",
+        "REDIRECT_URI": "http://localhost/callback/",
+    }
     with pytest.raises(ImproperlyConfigured):
         get_suap_settings()
 
 
 def test_get_suap_settings_raises_on_missing_secret(settings):
-    del settings.SUAP_CLIENT_SECRET
+    settings.SUAP_AUTH = {
+        "CLIENT_ID": "test-id",
+        "REDIRECT_URI": "http://localhost/callback/",
+    }
     with pytest.raises(ImproperlyConfigured):
         get_suap_settings()
 
 
 def test_get_suap_settings_raises_on_missing_redirect_uri(settings):
-    del settings.SUAP_REDIRECT_URI
+    settings.SUAP_AUTH = {
+        "CLIENT_ID": "test-id",
+        "CLIENT_SECRET": "test-secret",
+    }
     with pytest.raises(ImproperlyConfigured):
         get_suap_settings()
 
@@ -109,3 +118,30 @@ def test_get_oauth2_client_returns_client():
     from django_suap_auth.client import SuapOAuth2Client
     client = get_oauth2_client()
     assert isinstance(client, SuapOAuth2Client)
+
+
+# Tests para exceções e casos adicionais
+def test_suap_api_error_with_status_code():
+    from django_suap_auth.exceptions import SuapAPIError
+    error = SuapAPIError("API Error", status_code=400)
+    assert error.status_code == 400
+    assert str(error) == "API Error"
+
+
+def test_suap_token_error():
+    from django_suap_auth.exceptions import SuapTokenError
+    error = SuapTokenError("Token exchange failed")
+    assert str(error) == "Token exchange failed"
+
+
+def test_suap_user_info_error():
+    from django_suap_auth.exceptions import SuapUserInfoError
+    error = SuapUserInfoError("Failed to fetch user info")
+    assert str(error) == "Failed to fetch user info"
+
+
+def test_suap_state_mismatch_error():
+    from django_suap_auth.exceptions import SuapStateMismatchError
+    error = SuapStateMismatchError("State mismatch - possible CSRF")
+    assert str(error) == "State mismatch - possible CSRF"
+
