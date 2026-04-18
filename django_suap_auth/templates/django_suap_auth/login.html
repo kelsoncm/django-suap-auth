@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login com SUAP</title>
+</head>
+<body>
+    <h1>Entrar com SUAP</h1>
+    <p>Clique no botão abaixo para autenticar com sua conta SUAP.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Entrar com SUAP</button>
+    </form>
+</body>
+</html>
