@@ -97,13 +97,13 @@ def test_exchange_code_for_token_connection_error():
 def test_get_user_info_success():
     responses_lib.add(
         responses_lib.GET,
-        "https://suap.ifrn.edu.br/api/eu/",
-        json={"matricula": "20211234567", "nome_usual": "João Silva", "email": "joao@ifrn.edu.br"},
+        "https://suap.ifrn.edu.br/api/rh/eu/",
+        json={"identificacao": "20211234567", "nome_usual": "João Silva", "email": "joao@ifrn.edu.br"},
         status=200,
     )
     client = make_client()
     result = client.get_user_info("access-token-xyz")
-    assert result["matricula"] == "20211234567"
+    assert result["identificacao"] == "20211234567"
     assert result["email"] == "joao@ifrn.edu.br"
 
 
@@ -111,7 +111,7 @@ def test_get_user_info_success():
 def test_get_user_info_http_error():
     responses_lib.add(
         responses_lib.GET,
-        "https://suap.ifrn.edu.br/api/eu/",
+        "https://suap.ifrn.edu.br/api/rh/eu/",
         json={"detail": "Authentication credentials were not provided."},
         status=401,
     )
@@ -124,7 +124,7 @@ def test_get_user_info_http_error():
 def test_get_user_info_connection_error():
     responses_lib.add(
         responses_lib.GET,
-        "https://suap.ifrn.edu.br/api/eu/",
+        "https://suap.ifrn.edu.br/api/rh/eu/",
         body=Exception("connection refused"),
     )
     client = make_client()

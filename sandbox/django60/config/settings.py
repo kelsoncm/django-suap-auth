@@ -1,14 +1,45 @@
+import logging
 import os
 from pathlib import Path
 
 from dotenv import load_dotenv
 
+# Load .env file at the beginning
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR / ".env", override=False)
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-only-secret-key")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+# Logging configuration for debugging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG" if DEBUG else "INFO",
+    },
+    "loggers": {
+        "django_suap_auth": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+}
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -67,9 +98,11 @@ SUAP_CLIENT_ID = os.environ.get("SUAP_CLIENT_ID", "")
 SUAP_CLIENT_SECRET = os.environ.get("SUAP_CLIENT_SECRET", "")
 SUAP_REDIRECT_URI = os.environ.get("SUAP_REDIRECT_URI", "http://localhost:8000/auth/suap/callback/")
 SUAP_AUTH_SCOPES = ["identificacao", "email"]
+SUAP_AUTH_DIRECT_REDIRECT = os.environ.get("SUAP_AUTH_DIRECT_REDIRECT", "True") == "True"
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/dashboard/"
 LOGIN_URL = "/auth/suap/login/"
+LOGOUT_REDIRECT_URL = "/"
 
 STATIC_URL = "/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

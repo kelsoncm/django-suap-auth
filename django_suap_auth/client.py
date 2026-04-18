@@ -8,7 +8,7 @@ DEFAULT_BASE_URL = "https://suap.ifrn.edu.br"
 
 AUTHORIZE_PATH = "/o/authorize/"
 TOKEN_PATH = "/o/token/"
-USER_INFO_PATH = "/api/eu/"
+USER_INFO_PATH = "/api/rh/eu/"
 
 AVAILABLE_SCOPES = [
     "identificacao",

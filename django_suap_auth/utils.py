@@ -6,7 +6,7 @@ from django.core.exceptions import ImproperlyConfigured
 # A tuple key means "split the SUAP value on the first space and assign
 # the first part to key[0] and the remainder to key[1]".
 DEFAULT_USER_ATTR_MAP = {
-    "username": "matricula",
+    "username": "identificacao",
     "email": "email",
     ("first_name", "last_name"): "nome_usual",
 }

@@ -4,14 +4,32 @@
 
 django-suap-auth implementa o fluxo de autorização de código OAuth2.
 
-```
-Usuário → /auth/suap/login/ → página de autorização SUAP
-      ← redirecionar com código ←
-Usuário → /auth/suap/callback/?code=...&state=...
-      → trocar código por token
-      → buscar informações do usuário de SUAP /api/eu/
-      → autenticar/criar usuário Django
-      → redirecionar para LOGIN_REDIRECT_URL
+```mermaid
+flowchart TD
+    A["🔵 Usuário"] -->|Clica em 'Entrar'| B["GET /auth/suap/login/"]
+    B -->|Gera state| C["Armazena state na sessão"]
+    C -->|SUAP_AUTH_DIRECT_REDIRECT=True| D["Redireciona para SUAP"]
+    C -->|SUAP_AUTH_DIRECT_REDIRECT=False| E["Renderiza página intermediária<br/>login.html"]
+    E -->|Usuário clica no botão| D
+    D -->|Usuário faz login| F["🔐 SUAP /o/authorize/"]
+    F -->|Autoriza acesso| G["Redireciona com code & state"]
+    G -->|POST /auth/suap/callback/| H["Valida state<br/>Previne CSRF"]
+    H -->|✓ State válido| I["POST /o/token/"]
+    H -->|✗ State inválido| J["❌ Erro CSRF<br/>Redireciona para login"]
+    I -->|Troca code por token| K["Retorna access_token"]
+    K -->|GET /api/rh/eu/| L["🔐 SUAP API"]
+    L -->|Retorna dados do usuário| M["{'identificacao': '2080882',<br/>'nome_usual': 'Kelson', ...}"]
+    M -->|authenticate()| N["Backend SUAP"]
+    N -->|Cria/Atualiza User| O["✅ Usuário autenticado"]
+    O -->|login_user()| P["Armazena na sessão"]
+    P -->|Redireciona| Q["📍 LOGIN_REDIRECT_URL"]
+    Q -->|Ex: /dashboard/| R["✅ Usuário logado<br/>com sucesso"]
+    
+    style A fill:#e1f5ff
+    style F fill:#fff3e0
+    style L fill:#fff3e0
+    style R fill:#c8e6c9
+    style J fill:#ffcdd2
 ```
 
 ## Redirecionamento Direto (Padrão)

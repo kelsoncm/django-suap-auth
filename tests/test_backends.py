@@ -14,7 +14,7 @@ def test_authenticate_returns_none_without_user_info():
 @pytest.mark.django_db
 def test_authenticate_creates_user():
     backend = SuapAuthBackend()
-    user_info = {"matricula": "20211234567", "nome_usual": "João Silva", "email": "joao@ifrn.edu.br"}
+    user_info = {"identificacao": "20211234567", "nome_usual": "João Silva", "email": "joao@ifrn.edu.br"}
     user = backend.authenticate(None, suap_user_info=user_info)
     assert user is not None
     assert user.username == "20211234567"
@@ -28,7 +28,7 @@ def test_authenticate_updates_existing_user():
     User.objects.create_user(username="20211234567", email="old@ifrn.edu.br")
 
     backend = SuapAuthBackend()
-    user_info = {"matricula": "20211234567", "nome_usual": "João Silva", "email": "new@ifrn.edu.br"}
+    user_info = {"identificacao": "20211234567", "nome_usual": "João Silva", "email": "new@ifrn.edu.br"}
     user = backend.authenticate(None, suap_user_info=user_info)
     assert user is not None
     assert user.email == "new@ifrn.edu.br"
@@ -37,7 +37,7 @@ def test_authenticate_updates_existing_user():
 @pytest.mark.django_db
 def test_authenticate_returns_none_when_lookup_field_missing():
     backend = SuapAuthBackend()
-    user_info = {"nome_usual": "João Silva"}  # no matricula
+    user_info = {"nome_usual": "João Silva"}  # no identificacao
     result = backend.authenticate(None, suap_user_info=user_info)
     assert result is None
 
@@ -48,7 +48,7 @@ def test_authenticate_reactivates_inactive_user():
     User.objects.create_user(username="20211234567", email="joao@ifrn.edu.br", is_active=False)
 
     backend = SuapAuthBackend()
-    user_info = {"matricula": "20211234567", "email": "joao@ifrn.edu.br"}
+    user_info = {"identificacao": "20211234567", "email": "joao@ifrn.edu.br"}
     user = backend.authenticate(None, suap_user_info=user_info)
     assert user is not None
     assert user.is_active is True
@@ -74,7 +74,7 @@ def test_get_user_returns_none_for_nonexistent():
 def test_authenticate_with_json_field(settings):
     settings.SUAP_USER_JSON_FIELD = "last_name"  # reuse last_name for JSON storage in tests
     backend = SuapAuthBackend()
-    user_info = {"matricula": "20211234567", "email": "joao@ifrn.edu.br"}
+    user_info = {"identificacao": "20211234567", "email": "joao@ifrn.edu.br"}
     user = backend.authenticate(None, suap_user_info=user_info)
     assert user is not None
     assert user.username == "20211234567"
