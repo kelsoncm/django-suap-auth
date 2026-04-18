@@ -73,7 +73,7 @@ class SuapCallbackView(View):
                 next_url = request.GET.get("next", "")
                 safe_next_url = next_url.replace("\\", "")
                 parsed_next = urlsplit(safe_next_url)
-                if (
+                is_safe = (
                     safe_next_url
                     and safe_next_url.startswith("/")
                     and not parsed_next.scheme
@@ -83,8 +83,11 @@ class SuapCallbackView(View):
                         allowed_hosts={request.get_host()},
                         require_https=request.is_secure(),
                     )
-                ):
-                    return HttpResponseRedirect(safe_next_url)
+                )
+                if is_safe:
+                    # safe_next_url is a validated relative path starting with "/"
+                    # with no scheme or netloc — safe to redirect to
+                    return HttpResponseRedirect(parsed_next.path)
                 return redirect(settings.LOGIN_REDIRECT_URL)
             else:
                 messages.error(request, "Authentication failed. Please try again.")
