@@ -1,25 +1,22 @@
-# Security Policy
+# Política de Segurança
 
-## Supported Versions
+## Versões Suportadas
 
-| Version | Supported          |
+| Versão | Suportada          |
 | ------- | ------------------ |
 | 0.1.x   | :white_check_mark: |
 
-## Reporting a Vulnerability
+## Relatando uma Vulnerabilidade
 
-If you discover a security vulnerability in django-suap-auth, please report it
-by opening a [GitHub Security Advisory](https://github.com/kelsoncm/django-suap-auth/security/advisories/new).
+Se você descobrir uma vulnerabilidade de segurança no django-suap-auth, por favor relate-a abrindo um [Aviso de Segurança do GitHub](https://github.com/kelsoncm/django-suap-auth/security/advisories/new).
 
-**Please do not report security vulnerabilities through public GitHub issues.**
+**Por favor, não relate vulnerabilidades de segurança através de issues públicas do GitHub.**
 
-We will acknowledge your report within 48 hours and provide a more detailed
-response within 7 days. If the issue is confirmed, we will release a patch as
-soon as possible.
+Reconheceremos seu relatório dentro de 48 horas e forneceremos uma resposta mais detalhada dentro de 7 dias. Se o problema for confirmado, lançaremos um patch o mais rápido possível.
 
-## Security Considerations
+## Considerações de Segurança
 
-- OAuth2 state parameter is validated on every callback to prevent CSRF attacks.
-- Access tokens are never stored; they are exchanged immediately for user info.
-- Client secrets must be kept out of version control.
-- Always use HTTPS in production (`SUAP_REDIRECT_URI` must use HTTPS in production).
+- O parâmetro de estado OAuth2 é validado em cada callback para prevenir ataques CSRF.
+- Tokens de acesso nunca são armazenados; eles são trocados imediatamente por informações do usuário.
+- Segredos do cliente devem ser mantidos fora do controle de versão.
+- Sempre use HTTPS em produção (`SUAP_REDIRECT_URI` deve usar HTTPS em produção).

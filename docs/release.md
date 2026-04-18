@@ -1,17 +1,17 @@
-# Release Process
+# Processo de Lançamento
 
-## Versioning
+## Versionamento
 
-This project follows [Semantic Versioning](https://semver.org/).
+Este projeto segue [Versionamento Semântico](https://semver.org/).
 
-## Steps
+## Etapas
 
-1. Update `version` in `pyproject.toml`
-2. Update the changelog
-3. Create a git tag: `git tag v0.1.0`
-4. Push the tag: `git push origin v0.1.0`
-5. The `publish.yml` GitHub Actions workflow will automatically publish to PyPI via Trusted Publisher
+1. Atualizar `version` em `pyproject.toml`
+2. Atualizar o changelog
+3. Criar uma tag git: `git tag v0.1.0`
+4. Enviar a tag: `git push origin v0.1.0`
+5. O workflow `publish.yml` do GitHub Actions publicará automaticamente no PyPI via Trusted Publisher
 
 ## Trusted Publisher
 
-PyPI publication uses GitHub Actions [Trusted Publisher](https://docs.pypi.org/trusted-publishers/) — no secrets needed.
+A publicação no PyPI usa [Trusted Publisher](https://docs.pypi.org/trusted-publishers/) do GitHub Actions — nenhum segredo necessário.

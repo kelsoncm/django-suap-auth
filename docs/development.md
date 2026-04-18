@@ -1,6 +1,6 @@
-# Development
+# Desenvolvimento
 
-## Setup
+## Configuração
 
 ```bash
 git clone https://github.com/kelsoncm/django-suap-auth.git
@@ -10,13 +10,13 @@ pre-commit install
 pre-commit install --hook-type pre-push
 ```
 
-## Running Tests
+## Executando Testes
 
 ```bash
 pytest --cov=django_suap_auth --cov-report=term-missing
 ```
 
-## Code Style
+## Estilo de Código
 
 ```bash
 ruff check .
@@ -25,11 +25,11 @@ ruff format .
 
 ## pre-commit
 
-The project uses pre-commit hooks:
-- **pre-commit**: trailing whitespace, end of file fixer, yaml check, ruff lint/format
+O projeto usa hooks pre-commit:
+- **pre-commit**: espaços em branco à direita, fixador de fim de arquivo, verificação yaml, lint/format ruff
 - **pre-push**: pytest
 
-## Documentation
+## Documentação
 
 ```bash
 mkdocs serve

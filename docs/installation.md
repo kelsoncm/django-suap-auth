@@ -1,17 +1,17 @@
-# Installation
+# Instalação
 
-## Requirements
+## Requisitos
 
 - Python 3.10+
 - Django 5.2+
 
-## Install from PyPI
+## Instalar do PyPI
 
 ```bash
 pip install django-suap-auth
 ```
 
-## Add to INSTALLED_APPS
+## Adicionar a INSTALLED_APPS
 
 ```python
 INSTALLED_APPS = [
@@ -20,7 +20,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-## Configure URLs
+## Configurar URLs
 
 ```python
 # urls.py

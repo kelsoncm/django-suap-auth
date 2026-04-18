@@ -8,15 +8,15 @@
 [![Coverage](https://codecov.io/gh/kelsoncm/django-suap-auth/branch/main/graph/badge.svg)](https://codecov.io/gh/kelsoncm/django-suap-auth)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
-Django OAuth2 authentication backend for **SUAP** (Sistema Unificado de Administração Pública), the academic management system of [IFRN](https://www.ifrn.edu.br), hosted at [suap.ifrn.edu.br](https://suap.ifrn.edu.br).
+Backend de autenticação OAuth2 do Django para **SUAP** (Sistema Unificado de Administração Pública), o sistema de gestão acadêmica do [IFRN](https://www.ifrn.edu.br), hospedado em [suap.ifrn.edu.br](https://suap.ifrn.edu.br).
 
-## Installation
+## Instalação
 
 ```bash
 pip install django-suap-auth
 ```
 
-## Quick Start
+## Início Rápido
 
 ```python
 # settings.py
@@ -33,7 +33,7 @@ AUTHENTICATION_BACKENDS = [
 SUAP_CLIENT_ID = "your-client-id"
 SUAP_CLIENT_SECRET = "your-client-secret"
 SUAP_REDIRECT_URI = "https://yourapp.example.com/auth/suap/callback/"
-SUAP_AUTH_SCOPES = ["identificacao", "email"]  # optional
+SUAP_AUTH_SCOPES = ["identificacao", "email"]  # opcional
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGIN_URL = "/login/"
 ```
@@ -53,21 +53,21 @@ urlpatterns = [
 <a href="{% url 'suap_auth:login' %}">Login com SUAP</a>
 ```
 
-## Available Scopes
+## Escopos Disponíveis
 
-| Scope | Description |
-|-------|-------------|
-| `identificacao` | Basic identification (matricula, name, campus) |
-| `email` | Email address |
-| `documentos_pessoais` | Personal documents (CPF, RG) |
-| `dados_academicos` | Academic data (course, grades, situation) |
-| `dados_pessoais` | Personal data (birth date, nationality) |
-| `reitoria` | Institution-level data |
+| Escopo | Descrição |
+|--------|-----------|
+| `identificacao` | Identificação básica (matricula, nome, campus) |
+| `email` | Endereço de email |
+| `documentos_pessoais` | Documentos pessoais (CPF, RG) |
+| `dados_academicos` | Dados acadêmicos (curso, notas, situação) |
+| `dados_pessoais` | Dados pessoais (data de nascimento, nacionalidade) |
+| `reitoria` | Dados de nível institucional |
 
-## Documentation
+## Documentação
 
-Full documentation is available in the [`docs/`](docs/) directory and at the project's GitHub Pages.
+Documentação completa disponível no diretório [`docs/`](docs/) e nas GitHub Pages do projeto.
 
-## License
+## Licença
 
 MIT © 2026 kelsoncm

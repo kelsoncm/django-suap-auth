@@ -1,44 +1,44 @@
-# Attribute Mapping
+# Mapeamento de Atributos
 
-## Default Mapping
-
-```python
-SUAP_USER_ATTR_MAP = {
-    "username": "matricula",
-    "email": "email",
-    ("first_name", "last_name"): "nome_usual",
-}
-```
-
-## Custom Mapping
+## Mapeamento Padrão
 
 ```python
 SUAP_USER_ATTR_MAP = {
     "username": "matricula",
     "email": "email",
     ("first_name", "last_name"): "nome_usual",
-    "campus": "campus",  # custom field on your user model
 }
 ```
 
-## Storing Full JSON Response
-
-```python
-SUAP_USER_JSON_FIELD = "suap_data"  # JSONField on your user model or profile
-```
-
-Or via the attr map:
+## Mapeamento Personalizado
 
 ```python
 SUAP_USER_ATTR_MAP = {
     "username": "matricula",
-    "suap_data": "fulljson",  # stores the entire response dict
+    "email": "email",
+    ("first_name", "last_name"): "nome_usual",
+    "campus": "campus",  # campo personalizado no seu modelo de usuário
 }
 ```
 
-## Dotted Key Paths
+## Armazenando a Resposta JSON Completa
 
-For nested SUAP response keys:
+```python
+SUAP_USER_JSON_FIELD = "suap_data"  # JSONField no seu modelo de usuário ou perfil
+```
+
+Ou via o mapa de atributos:
+
+```python
+SUAP_USER_ATTR_MAP = {
+    "username": "matricula",
+    "suap_data": "fulljson",  # armazena o dicionário de resposta completo
+}
+```
+
+## Caminhos de Chave Pontilhados
+
+Para chaves de resposta SUAP aninhadas:
 
 ```python
 SUAP_USER_ATTR_MAP = {
@@ -47,9 +47,9 @@ SUAP_USER_ATTR_MAP = {
 }
 ```
 
-## Name Splitting
+## Divisão de Nome
 
-When using a tuple key, the SUAP value is split on the first space:
+Quando usar uma chave tupla, o valor SUAP é dividido no primeiro espaço:
 
 ```python
 ("first_name", "last_name"): "nome_usual"

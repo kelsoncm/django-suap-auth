@@ -1,17 +1,17 @@
-# SUAP OAuth2 Scopes
+# Escopos OAuth2 do SUAP
 
-## Available Scopes
+## Escopos Disponíveis
 
-| Scope | Description | Key Attributes |
-|-------|-------------|----------------|
-| `identificacao` | Basic identification | `matricula`, `nome_usual`, `campus`, `tipo_usuario`, `url_foto_75x100` |
-| `email` | Email address | `email` |
-| `documentos_pessoais` | Personal documents | `cpf`, `rg` |
-| `dados_academicos` | Academic data | `curso`, `situacao`, `periodo_atual` |
-| `dados_pessoais` | Personal data | `data_nascimento`, `naturalidade`, `tipo_sanguineo`, `filiacao` |
-| `reitoria` | Institution-level data | Institution-specific fields |
+| Escopo | Descrição | Atributos Chave |
+|--------|-----------|-----------------|
+| `identificacao` | Identificação básica | `matricula`, `nome_usual`, `campus`, `tipo_usuario`, `url_foto_75x100` |
+| `email` | Endereço de email | `email` |
+| `documentos_pessoais` | Documentos pessoais | `cpf`, `rg` |
+| `dados_academicos` | Dados acadêmicos | `curso`, `situacao`, `periodo_atual` |
+| `dados_pessoais` | Dados pessoais | `data_nascimento`, `naturalidade`, `tipo_sanguineo`, `filiacao` |
+| `reitoria` | Dados de nível institucional | Campos específicos da instituição |
 
-## Example SUAP Response
+## Exemplo de Resposta SUAP
 
 ```json
 {
@@ -33,7 +33,7 @@
 }
 ```
 
-## Configuring Scopes
+## Configurando Escopos
 
 ```python
 SUAP_AUTH_SCOPES = ["identificacao", "email", "dados_academicos"]

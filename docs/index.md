@@ -1,19 +1,19 @@
 # django-suap-auth
 
-Django OAuth2 authentication backend for **SUAP** (Sistema Unificado de Administração Pública), the academic management system of IFRN.
+Backend de autenticação OAuth2 do Django para **SUAP** (Sistema Unificado de Administração Pública), o sistema de gestão acadêmica do IFRN.
 
-## Features
+## Funcionalidades
 
-- OAuth2 authorization code flow with SUAP
-- Configurable scopes (`identificacao`, `email`, `documentos_pessoais`, `dados_academicos`, `dados_pessoais`, `reitoria`)
-- Flexible attribute mapping from SUAP response to Django user model fields
-- Optional JSON field storage for the full SUAP response
-- Configurable intermediate login page (`SUAP_AUTH_DIRECT_REDIRECT`)
-- CSRF protection via state parameter validation
+- Fluxo de autorização de código OAuth2 com SUAP
+- Escopos configuráveis (`identificacao`, `email`, `documentos_pessoais`, `dados_academicos`, `dados_pessoais`, `reitoria`)
+- Mapeamento flexível de atributos da resposta SUAP para campos do modelo de usuário do Django
+- Armazenamento opcional em campo JSON para a resposta completa do SUAP
+- Página de login intermediária configurável (`SUAP_AUTH_DIRECT_REDIRECT`)
+- Proteção CSRF via validação do parâmetro de estado
 
-## Quick Links
+## Links Rápidos
 
-- [Installation](installation.md)
-- [Configuration](configuration.md)
-- [Scopes](scopes.md)
-- [Attribute Mapping](attribute-mapping.md)
+- [Instalação](installation.md)
+- [Configuração](configuration.md)
+- [Escopos](scopes.md)
+- [Mapeamento de Atributos](attribute-mapping.md)
