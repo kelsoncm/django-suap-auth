@@ -178,14 +178,24 @@ def test_callback_view_preserves_query_params_in_next(mock_login, mock_auth, moc
 
 @pytest.mark.django_db
 def test_login_view_intermediate_page(client, settings):
-    settings.SUAP_AUTH_DIRECT_REDIRECT = False
+    settings.SUAP_AUTH = {
+        'CLIENT_ID': 'test-id',
+        'CLIENT_SECRET': 'test-secret',
+        'REDIRECT_URI': 'http://localhost/callback/',
+        'DIRECT_REDIRECT': False,
+    }
     response = client.get("/auth/suap/login/")
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
 def test_login_view_post_starts_oauth(client, settings):
-    settings.SUAP_AUTH_DIRECT_REDIRECT = False
+    settings.SUAP_AUTH = {
+        'CLIENT_ID': 'test-id',
+        'CLIENT_SECRET': 'test-secret',
+        'REDIRECT_URI': 'http://localhost/callback/',
+        'DIRECT_REDIRECT': False,
+    }
     response = client.post("/auth/suap/login/")
     assert response.status_code == 302
     assert "suap.ifrn.edu.br" in response["Location"]

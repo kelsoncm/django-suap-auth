@@ -18,7 +18,7 @@ class SuapLoginView(View):
     """
     Initiates the SUAP OAuth2 authorization code flow.
 
-    If ``SUAP_AUTH_DIRECT_REDIRECT`` is ``True`` (the default), the user is
+    If ``SUAP_AUTH['DIRECT_REDIRECT']`` is ``True`` (the default), the user is
     redirected immediately to SUAP. Set it to ``False`` to render an
     intermediate confirmation page instead — subclass this view and override
     ``get_intermediate_template`` to customize the template rendered.
@@ -206,9 +206,7 @@ class SuapDebugView(View):
                 "suap_oauth2_state": request.session.get("suap_oauth2_state"),
             },
             "settings": {
-                "SUAP_CLIENT_ID": settings.SUAP_CLIENT_ID,
-                "SUAP_REDIRECT_URI": settings.SUAP_REDIRECT_URI,
-                "SUAP_AUTH_DIRECT_REDIRECT": settings.SUAP_AUTH_DIRECT_REDIRECT,
+                "SUAP_AUTH": getattr(settings, "SUAP_AUTH", {}),
                 "LOGIN_URL": settings.LOGIN_URL,
                 "LOGIN_REDIRECT_URL": settings.LOGIN_REDIRECT_URL,
                 "AUTHENTICATION_BACKENDS": settings.AUTHENTICATION_BACKENDS,

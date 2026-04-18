@@ -6,9 +6,11 @@ INSTALLED_APPS = [
     "django_suap_auth",
 ]
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
-SUAP_CLIENT_ID = "test-client-id"
-SUAP_CLIENT_SECRET = "test-client-secret"
-SUAP_REDIRECT_URI = "http://localhost:8000/auth/suap/callback/"
+SUAP_AUTH = {
+    "CLIENT_ID": "test-client-id",
+    "CLIENT_SECRET": "test-client-secret",
+    "REDIRECT_URI": "http://localhost:8000/auth/suap/callback/",
+}
 AUTHENTICATION_BACKENDS = ["django_suap_auth.backends.SuapAuthBackend"]
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGIN_URL = "/login/"

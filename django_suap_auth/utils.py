@@ -13,34 +13,46 @@ DEFAULT_USER_ATTR_MAP = {
 
 
 def get_suap_settings():
-    """Read and validate SUAP settings from Django settings."""
+    """Read and validate SUAP settings from Django settings.
+
+    Expects a single SUAP_AUTH dictionary with all configuration:
+
+    SUAP_AUTH = {
+        'CLIENT_ID': 'your-id',
+        'CLIENT_SECRET': 'your-secret',
+        'REDIRECT_URI': 'https://example.com/callback/',
+        'BASE_URL': 'https://suap.ifrn.edu.br',  # optional
+        'SCOPES': ['identificacao', 'email'],  # optional
+        'USER_LOOKUP_FIELD': 'username',  # optional
+        'USER_ATTR_MAP': {...},  # optional
+        'USER_JSON_FIELD': None,  # optional
+        'DIRECT_REDIRECT': True,  # optional
+    }
+    """
     from django.conf import settings
 
-    client_id = getattr(settings, "SUAP_CLIENT_ID", None)
-    client_secret = getattr(settings, "SUAP_CLIENT_SECRET", None)
-    redirect_uri = getattr(settings, "SUAP_REDIRECT_URI", None)
+    suap_auth = getattr(settings, "SUAP_AUTH", {})
 
-    missing = []
-    if not client_id:
-        missing.append("SUAP_CLIENT_ID")
-    if not client_secret:
-        missing.append("SUAP_CLIENT_SECRET")
-    if not redirect_uri:
-        missing.append("SUAP_REDIRECT_URI")
+    # Validate required fields
+    required = ['CLIENT_ID', 'CLIENT_SECRET', 'REDIRECT_URI']
+    missing = [field for field in required if not suap_auth.get(field)]
 
     if missing:
-        raise ImproperlyConfigured(f"Missing required SUAP settings: {', '.join(missing)}")
+        raise ImproperlyConfigured(
+            f"Missing required SUAP_AUTH settings: {', '.join(missing)}. "
+            f"Configure SUAP_AUTH dictionary in settings.py"
+        )
 
     return {
-        "client_id": client_id,
-        "client_secret": client_secret,
-        "redirect_uri": redirect_uri,
-        "scopes": getattr(settings, "SUAP_AUTH_SCOPES", ["identificacao", "email"]),
-        "base_url": getattr(settings, "SUAP_BASE_URL", "https://suap.ifrn.edu.br"),
-        "user_lookup_field": getattr(settings, "SUAP_USER_LOOKUP_FIELD", "username"),
-        "user_attr_map": getattr(settings, "SUAP_USER_ATTR_MAP", DEFAULT_USER_ATTR_MAP),
-        "json_field": getattr(settings, "SUAP_USER_JSON_FIELD", None),
-        "direct_redirect": getattr(settings, "SUAP_AUTH_DIRECT_REDIRECT", True),
+        "client_id": suap_auth["CLIENT_ID"],
+        "client_secret": suap_auth["CLIENT_SECRET"],
+        "redirect_uri": suap_auth["REDIRECT_URI"],
+        "scopes": suap_auth.get("SCOPES", ["identificacao", "email"]),
+        "base_url": suap_auth.get("BASE_URL", "https://suap.ifrn.edu.br"),
+        "user_lookup_field": suap_auth.get("USER_LOOKUP_FIELD", "username"),
+        "user_attr_map": suap_auth.get("USER_ATTR_MAP", DEFAULT_USER_ATTR_MAP),
+        "json_field": suap_auth.get("USER_JSON_FIELD", None),
+        "direct_redirect": suap_auth.get("DIRECT_REDIRECT", True),
     }
 
 

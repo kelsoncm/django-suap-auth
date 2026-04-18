@@ -48,8 +48,9 @@ from django.conf import settings
 from django_suap_auth.utils import get_suap_settings
 
 print("CONFIGURAÇÃO ATUAL:")
-print(f"  SUAP_CLIENT_ID: {settings.SUAP_CLIENT_ID[:20]}...")
-print(f"  SUAP_AUTH_DIRECT_REDIRECT: {settings.SUAP_AUTH_DIRECT_REDIRECT}")
+suap_auth = getattr(settings, 'SUAP_AUTH', {})
+print(f"  SUAP_AUTH CLIENT_ID: {str(suap_auth.get('CLIENT_ID', ''))[:20]}...")
+print(f"  SUAP_AUTH DIRECT_REDIRECT: {suap_auth.get('DIRECT_REDIRECT', 'NÃO DEFINIDO')}")
 print(f"  LOGIN_URL: {settings.LOGIN_URL}")
 print(f"  LOGIN_REDIRECT_URL: {settings.LOGIN_REDIRECT_URL}")
 print(f"  AUTHENTICATION_BACKENDS: {settings.AUTHENTICATION_BACKENDS}")

@@ -4,9 +4,10 @@ from django.shortcuts import render
 
 
 def home(request):
+    suap_auth = getattr(settings, "SUAP_AUTH", {})
     context = {
-        "suap_client_id": settings.SUAP_CLIENT_ID,
-        "suap_redirect_uri": settings.SUAP_REDIRECT_URI,
+        "suap_client_id": suap_auth.get("CLIENT_ID", ""),
+        "suap_redirect_uri": suap_auth.get("REDIRECT_URI", ""),
     }
     return render(request, "home/home.html", context)
 

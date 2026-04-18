@@ -72,11 +72,14 @@ def test_get_user_returns_none_for_nonexistent():
 
 @pytest.mark.django_db
 def test_authenticate_with_json_field(settings):
-    settings.SUAP_USER_JSON_FIELD = "last_name"  # reuse last_name for JSON storage in tests
+    settings.SUAP_AUTH = {
+        'CLIENT_ID': 'test-id',
+        'CLIENT_SECRET': 'test-secret',
+        'REDIRECT_URI': 'http://localhost/callback/',
+        'USER_JSON_FIELD': 'last_name',  # reuse last_name for JSON storage in tests
+    }
     backend = SuapAuthBackend()
     user_info = {"identificacao": "20211234567", "email": "joao@ifrn.edu.br"}
     user = backend.authenticate(None, suap_user_info=user_info)
     assert user is not None
     assert user.username == "20211234567"
-    # Reset
-    settings.SUAP_USER_JSON_FIELD = None

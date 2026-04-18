@@ -94,11 +94,13 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-SUAP_CLIENT_ID = os.environ.get("SUAP_CLIENT_ID", "")
-SUAP_CLIENT_SECRET = os.environ.get("SUAP_CLIENT_SECRET", "")
-SUAP_REDIRECT_URI = os.environ.get("SUAP_REDIRECT_URI", "http://localhost:8000/auth/suap/callback/")
-SUAP_AUTH_SCOPES = ["identificacao", "email"]
-SUAP_AUTH_DIRECT_REDIRECT = os.environ.get("SUAP_AUTH_DIRECT_REDIRECT", "True") == "True"
+SUAP_AUTH = {
+    "CLIENT_ID": os.environ.get("SUAP_CLIENT_ID", ""),
+    "CLIENT_SECRET": os.environ.get("SUAP_CLIENT_SECRET", ""),
+    "REDIRECT_URI": os.environ.get("SUAP_REDIRECT_URI", "http://localhost:8000/auth/suap/callback/"),
+    "SCOPES": ["identificacao", "email"],
+    "DIRECT_REDIRECT": os.environ.get("SUAP_DIRECT_REDIRECT", "True") == "True",
+}
 
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGIN_URL = "/auth/suap/login/"
