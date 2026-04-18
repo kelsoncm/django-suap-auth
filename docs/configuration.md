@@ -1,7 +1,3 @@
----
-render_with_liquid: false
----
-
 # Configuração
 
 ## Configuração Básica
@@ -160,6 +156,7 @@ Quando `DIRECT_REDIRECT = False`, a view exibe o template `django_suap_auth/logi
 
 Crie o arquivo `templates/django_suap_auth/login.html` no seu projeto (certifique-se de que `APP_DIRS = True` ou que o diretório esteja em `DIRS`):
 
+{% raw %}
 ```html
 {% extends "base.html" %}
 
@@ -172,6 +169,7 @@ Crie o arquivo `templates/django_suap_auth/login.html` no seu projeto (certifiqu
   </form>
 {% endblock %}
 ```
+{% endraw %}
 
 O template padrão é um HTML mínimo sem dependências — substitua-o livremente.
 
