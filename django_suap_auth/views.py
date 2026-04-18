@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
 
-from .exceptions import SuapStateMismatchError, SuapTokenError, SuapUserInfoError
+from .exceptions import SuapStateMismatchError, SuapTokenError, SuapUserInfoError, SuapUserNotAllowedError
 from .utils import generate_state, get_oauth2_client, get_suap_settings
 
 logger = logging.getLogger(__name__)
@@ -46,6 +46,16 @@ class SuapLoginView(View):
         authorization_url = client.get_authorization_url(state)
         return redirect(authorization_url)
 
+class SuapAuthenticationError(Exception):
+    def __init__(self, message=None):
+        self.message = message
+
+    def __str__(self):
+        raise NotImplementedError
+
+    def some_method(self, *args, **kwargs):
+        raise NotImplementedError
+
 
 class SuapCallbackView(View):
     """Handles the OAuth2 callback from SUAP."""
@@ -57,8 +67,6 @@ class SuapCallbackView(View):
         cfg = get_suap_settings()
         error = request.GET.get("error")
         if error:
-            error_description = request.GET.get("error_description", "")
-            logger.error(f"SUAP retornou erro: {error} - {error_description}")
             messages.error(request, f"SUAP login error: {error}")
             return redirect(settings.LOGIN_URL)
 
@@ -68,7 +76,6 @@ class SuapCallbackView(View):
             stored_state = request.session.pop("suap_oauth2_state", None)
 
             if not stored_state or received_state != stored_state:
-                logger.error("   ✗ ERRO: State mismatch!")
                 raise SuapStateMismatchError("OAuth2 state mismatch — possible CSRF attack.")
 
             # 2. Trocar código por token
@@ -78,20 +85,17 @@ class SuapCallbackView(View):
             try:
                 token_data = client.exchange_code_for_token(code)
             except Exception as e:
-                logger.error(f"   ✗ ERRO ao obter token: {e}")
-                raise
+                raise SuapTokenError(f"Failed to exchange code for token: {e}")
 
             access_token = token_data.get("access_token")
             if not access_token:
-                logger.error("   ✗ ERRO: access_token não encontrado na resposta")
                 raise SuapTokenError("access_token not found in token response")
 
             # 3. Buscar informações do usuário
             try:
                 user_info = client.get_user_info(access_token)
             except Exception as e:
-                logger.error(f"   ✗ ERRO ao obter informações: {e}")
-                raise
+                raise SuapUserInfoError(f"Failed to retrieve user info: {e}")
 
             # 4. Autenticar usuário no Django
             user = authenticate(request, suap_user_info=user_info)
@@ -122,64 +126,23 @@ class SuapCallbackView(View):
                 else:
                     return redirect(settings.LOGIN_REDIRECT_URL)
             else:
-                logger.error("   ✗ ERRO: authenticate() retornou None")
-                logger.error("   Possíveis causas:")
-                logger.error("   - suap_user_info não contém os campos esperados")
-                logger.error("   - Mapeamento de usuário não configurado corretamente")
-                logger.error("   - Backend SUAP não está ativado em AUTHENTICATION_BACKENDS")
-                messages.error(request, "Authentication failed. Please try again.")
-                return redirect(settings.LOGIN_URL)
+                raise SuapAuthenticationError("Authentication failed. User not found or invalid credentials.")
 
         except SuapStateMismatchError as e:
-            logger.error(f"State Mismatch: {e}")
             messages.error(request, "Security check failed. Please try logging in again.")
             return redirect(settings.LOGIN_URL)
         except SuapTokenError as e:
-            logger.error(f"Token Error: {e}")
             messages.error(request, "Failed to complete login. Please try again.")
             return redirect(settings.LOGIN_URL)
         except SuapUserInfoError as e:
-            logger.error(f"User Info Error: {e}")
             messages.error(request, "Failed to retrieve your profile. Please try again.")
             return redirect(settings.LOGIN_URL)
+        except SuapUserNotAllowedError:
+            messages.error(request, "Your account is not authorised to access this application.")
+            return redirect(settings.LOGIN_URL)
+        except SuapAuthenticationError as e:
+            messages.error(request, "Authentication failed. Please try again.")
+            return redirect(settings.LOGIN_URL)
         except Exception as e:
-            logger.exception(f"Erro inesperado no callback: {e}")
             messages.error(request, "An unexpected error occurred. Please try again.")
             return redirect(settings.LOGIN_URL)
-
-
-class SuapDebugView(View):
-    """Debug view para ver informações de configuração e sessão."""
-
-    def get(self, request):
-        from django.conf import settings
-        from django.http import JsonResponse
-
-        # Apenas em DEBUG mode
-        if not settings.DEBUG:
-            return JsonResponse({"error": "Debug mode is disabled"}, status=403)
-
-        debug_info = {
-            "user": {
-                "username": request.user.username if request.user.is_authenticated else "anonymous",
-                "is_authenticated": request.user.is_authenticated,
-                "email": request.user.email if request.user.is_authenticated else None,
-            },
-            "session": {
-                "session_key": request.session.session_key,
-                "suap_oauth2_state": request.session.get("suap_oauth2_state"),
-            },
-            "settings": {
-                "SUAP_AUTH": getattr(settings, "SUAP_AUTH", {}),
-                "LOGIN_URL": settings.LOGIN_URL,
-                "LOGIN_REDIRECT_URL": settings.LOGIN_REDIRECT_URL,
-                "AUTHENTICATION_BACKENDS": settings.AUTHENTICATION_BACKENDS,
-            },
-            "request": {
-                "path": request.path,
-                "GET": dict(request.GET),
-                "method": request.method,
-            },
-        }
-
-        return JsonResponse(debug_info, json_dumps_params={"indent": 2})

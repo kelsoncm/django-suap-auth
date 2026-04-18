@@ -54,6 +54,12 @@ def get_suap_settings():
         "json_field": suap_auth.get("USER_JSON_FIELD", None),
         "direct_redirect": suap_auth.get("DIRECT_REDIRECT", True),
         "backend": suap_auth.get("BACKEND", "django_suap_auth.backends.SuapAuthBackend"),
+        "create_user": suap_auth.get("CREATE_USER", True),
+        "user_defaults": suap_auth.get("USER_DEFAULTS", {"is_active": True}),
+        "first_user_defaults": suap_auth.get("FIRST_USER_DEFAULTS", None),
+        # None = all mapped fields; [] = none; ["field", ...] = only those listed
+        "update_fields_on_create": suap_auth.get("UPDATE_FIELDS_ON_CREATE", None),
+        "update_fields_on_login": suap_auth.get("UPDATE_FIELDS_ON_LOGIN", None),
     }
 
 

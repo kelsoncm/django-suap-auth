@@ -20,3 +20,7 @@ class SuapAPIError(SuapAuthError):
     def __init__(self, message, status_code=None):
         super().__init__(message)
         self.status_code = status_code
+
+
+class SuapUserNotAllowedError(SuapAuthError):
+    """Raised when a SUAP user has no local account and CREATE_USER is False."""

@@ -1,57 +1,59 @@
 # Mapeamento de Atributos
 
+O dicionário `USER_ATTR_MAP` define como os campos retornados pelo SUAP são gravados
+no model `User` do Django.
+
 ## Mapeamento Padrão
 
 ```python
-SUAP_USER_ATTR_MAP = {
-    "username": "matricula",
-    "email": "email",
-    ("first_name", "last_name"): "nome_usual",
+SUAP_AUTH = {
+    # ...
+    'USER_ATTR_MAP': {
+        'username': 'identificacao',
+        'email': 'email',
+        ('first_name', 'last_name'): 'nome_usual',
+    },
 }
 ```
 
-## Mapeamento Personalizado
+## Campo Simples
 
 ```python
-SUAP_USER_ATTR_MAP = {
-    "username": "matricula",
-    "email": "email",
-    ("first_name", "last_name"): "nome_usual",
-    "campus": "campus",  # campo personalizado no seu modelo de usuário
+'USER_ATTR_MAP': {
+    'username': 'identificacao',
+    'email': 'email',
+}
+```
+
+## Divisão de Nome em Dois Campos
+
+Quando a chave é uma **tupla**, o valor SUAP é dividido no primeiro espaço:
+
+```python
+('first_name', 'last_name'): 'nome_usual'
+# "João Silva Santos" → first_name="João", last_name="Silva Santos"
+# "João"              → first_name="João", last_name=""
+```
+
+## Caminhos de Chave Pontilhados (Aninhados)
+
+Para acessar campos aninhados na resposta JSON do SUAP:
+
+```python
+'USER_ATTR_MAP': {
+    'username': 'identificacao',
+    'data_nascimento': 'dados_pessoais.data_nascimento',
 }
 ```
 
 ## Armazenando a Resposta JSON Completa
 
-```python
-SUAP_USER_JSON_FIELD = "suap_data"  # JSONField no seu modelo de usuário ou perfil
-```
-
-Ou via o mapa de atributos:
+Use `USER_JSON_FIELD` para gravar o dicionário completo retornado pelo SUAP em um
+`JSONField` do seu model:
 
 ```python
-SUAP_USER_ATTR_MAP = {
-    "username": "matricula",
-    "suap_data": "fulljson",  # armazena o dicionário de resposta completo
+SUAP_AUTH = {
+    # ...
+    'USER_JSON_FIELD': 'suap_data',  # JSONField no seu model de usuário
 }
-```
-
-## Caminhos de Chave Pontilhados
-
-Para chaves de resposta SUAP aninhadas:
-
-```python
-SUAP_USER_ATTR_MAP = {
-    "username": "matricula",
-    "data_nascimento": "dados_pessoais.data_nascimento",
-}
-```
-
-## Divisão de Nome
-
-Quando usar uma chave tupla, o valor SUAP é dividido no primeiro espaço:
-
-```python
-("first_name", "last_name"): "nome_usual"
-# "João Silva Santos" → first_name="João", last_name="Silva Santos"
 ```
