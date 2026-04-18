@@ -53,6 +53,7 @@ def get_suap_settings():
         "user_attr_map": suap_auth.get("USER_ATTR_MAP", DEFAULT_USER_ATTR_MAP),
         "json_field": suap_auth.get("USER_JSON_FIELD", None),
         "direct_redirect": suap_auth.get("DIRECT_REDIRECT", True),
+        "backend": suap_auth.get("BACKEND", "django_suap_auth.backends.SuapAuthBackend"),
     }
 
 
