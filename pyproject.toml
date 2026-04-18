@@ -53,7 +53,7 @@ source = ["django_suap_auth"]
 omit = ["tests/*", "sandbox/*"]
 
 [tool.coverage.report]
-fail_under = 95
+fail_under = 100
 show_missing = true
 
 [tool.ruff]
