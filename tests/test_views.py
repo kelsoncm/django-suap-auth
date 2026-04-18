@@ -153,6 +153,30 @@ def test_callback_view_redirects_to_safe_next_url(mock_login, mock_auth, mock_ge
 
 
 @pytest.mark.django_db
+@patch("django_suap_auth.views.get_oauth2_client")
+@patch("django_suap_auth.views.authenticate")
+@patch("django_suap_auth.views.login")
+def test_callback_view_preserves_query_params_in_next(mock_login, mock_auth, mock_get_client, client):
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    user = User.objects.create_user(username="20211234567", email="joao@ifrn.edu.br")
+
+    mock_oauth = MagicMock()
+    mock_oauth.exchange_code_for_token.return_value = {"access_token": "tok"}
+    mock_oauth.get_user_info.return_value = {"matricula": "20211234567"}
+    mock_get_client.return_value = mock_oauth
+    mock_auth.return_value = user
+
+    session = client.session
+    session["suap_oauth2_state"] = "valid-state"
+    session.save()
+
+    response = client.get("/auth/suap/callback/?code=code&state=valid-state&next=/dashboard/%3Ftab%3Dsettings")
+    assert response.status_code == 302
+    assert "/dashboard/" in response["Location"]
+
+
+@pytest.mark.django_db
 def test_login_view_intermediate_page(client, settings):
     settings.SUAP_AUTH_DIRECT_REDIRECT = False
     response = client.get("/auth/suap/login/")

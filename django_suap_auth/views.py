@@ -1,4 +1,4 @@
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlunsplit
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -85,9 +85,10 @@ class SuapCallbackView(View):
                     )
                 )
                 if is_safe:
-                    # safe_next_url is a validated relative path starting with "/"
-                    # with no scheme or netloc — safe to redirect to
-                    return HttpResponseRedirect(parsed_next.path)
+                    # Reconstruct a safe relative URL from only the validated path and
+                    # query components, explicitly dropping scheme, netloc, and fragment.
+                    safe_redirect = urlunsplit(("", "", parsed_next.path, parsed_next.query, ""))
+                    return HttpResponseRedirect(safe_redirect)
                 return redirect(settings.LOGIN_REDIRECT_URL)
             else:
                 messages.error(request, "Authentication failed. Please try again.")
