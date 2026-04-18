@@ -1,7 +1,7 @@
 # django-suap-auth
 
 [![PyPI Version](https://img.shields.io/pypi/v/django-suap-auth)](https://pypi.org/project/django-suap-auth/)
-[![Python Versions](https://img.shields.io/pypi/pyversions/django-suap-auth)](https://pypi.org/project/django-suap-auth/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/django-suap-auth.svg)](https://pypi.org/project/django-suap-auth/)
 [![Django Versions](https://img.shields.io/badge/django-5.2%20|%206.0-blue)](https://www.djangoproject.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/kelsoncm/django-suap-auth/actions/workflows/test.yml/badge.svg)](https://github.com/kelsoncm/django-suap-auth/actions/workflows/test.yml)
